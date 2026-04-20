@@ -2,8 +2,8 @@ import { useEffect, useMemo, useState } from "react";
 import { AddSiteDialog } from "../../components/AddSiteDialog";
 import { CategoryNav } from "../../components/CategoryNav";
 import { SiteCard } from "../../components/SiteCard";
-import type { SiteItem } from "../../domain/models/site";
 import { querySites } from "../../application/use-cases/query-sites";
+import type { SiteItem } from "../../domain/models/site";
 import "./popup.css";
 
 const defaultSites: SiteItem[] = [

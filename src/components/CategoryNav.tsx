@@ -39,7 +39,7 @@ function iconForCategory(category: string) {
     case "UI":
       return "◔";
     case "笔记":
-      return "≣";
+      return "☰";
     default:
       return "•••";
   }

@@ -21,7 +21,7 @@ export function AddSiteDialog({ open, onClose }: AddSiteDialogProps) {
             <div className="field-row">
               <label className="label">网站名称</label>
             </div>
-            <input className="input" type="text" value="ChatGPT" readOnly />
+            <input className="input" readOnly type="text" value="ChatGPT" />
           </div>
 
           <div className="field">
@@ -30,7 +30,7 @@ export function AddSiteDialog({ open, onClose }: AddSiteDialogProps) {
               <span className="hint">Auto-Sync Active</span>
             </div>
             <div className="url-box">
-              <span className="url-icon">⛓</span>
+              <span className="url-icon">⌁</span>
               <span>https://chat.openai.com</span>
             </div>
           </div>
@@ -63,7 +63,7 @@ export function AddSiteDialog({ open, onClose }: AddSiteDialogProps) {
             <div className="field-row">
               <label className="label">备注（可选）</label>
             </div>
-            <textarea className="textarea" value="日常AI工具" readOnly />
+            <textarea className="textarea" readOnly value="日常 AI 工具" />
           </div>
         </div>
 
