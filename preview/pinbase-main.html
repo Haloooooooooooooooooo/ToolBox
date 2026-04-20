@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PinBase 主面板预览</title>
+  <style>
+    :root {
+      --bg: #f6efe3;
+      --panel: #fffaf2;
+      --line: #1d1c17;
+      --muted: #8d8178;
+      --red: #c4122f;
+      --blue: #2d58db;
+      --gold: #9b8500;
+      --olive: #7f6a00;
+      --shadow: 4px 4px 0 0 #1d1c17;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 8% 92%, rgba(196, 18, 47, 0.08), transparent 180px),
+        radial-gradient(circle at 94% 10%, rgba(45, 88, 219, 0.10), transparent 140px),
+        var(--bg);
+      color: var(--line);
+      font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .app {
+      width: min(100%, 760px);
+      min-height: 960px;
+      background: var(--panel);
+      border: 2px solid var(--line);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 28px;
+      border-bottom: 2px solid var(--line);
+      background: rgba(255, 250, 242, 0.96);
+    }
+
+    .brand {
+      margin: 0;
+      font-size: 28px;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      text-transform: uppercase;
+    }
+
+    .search {
+      width: 240px;
+      position: relative;
+    }
+
+    .search input {
+      width: 100%;
+      height: 36px;
+      border: 2px solid var(--line);
+      background: #fff;
+      padding: 0 38px 0 14px;
+      font-size: 15px;
+      outline: none;
+    }
+
+    .search .icon {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 16px;
+      color: var(--line);
+    }
+
+    .hero {
+      position: relative;
+      padding: 30px 24px;
+      border-bottom: 2px solid var(--line);
+      background: #ece7de;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 136px;
+      overflow: hidden;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      right: -12px;
+      top: -10px;
+      width: 150px;
+      height: 150px;
+      border-radius: 999px;
+      background: rgba(45, 88, 219, 0.12);
+    }
+
+    .cta {
+      position: relative;
+      z-index: 1;
+      border: 2px solid var(--line);
+      background: var(--red);
+      color: #fff;
+      font-size: 19px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      padding: 22px 40px;
+      box-shadow: var(--shadow);
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .cta .plus {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: #fff;
+      color: var(--red);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      line-height: 1;
+      font-weight: 900;
+    }
+
+    .content {
+      display: flex;
+      flex: 1;
+      min-height: 0;
+    }
+
+    .sidebar {
+      width: 120px;
+      border-right: 2px solid var(--line);
+      padding: 20px 12px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .sidebar-label {
+      margin: 4px 0 12px;
+      text-align: center;
+      font-size: 12px;
+      color: #b6aaa2;
+      font-weight: 800;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+
+    .nav-item {
+      width: 100%;
+      min-height: 88px;
+      border: 2px solid transparent;
+      background: transparent;
+      color: var(--line);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .nav-item .nav-icon {
+      font-size: 28px;
+      line-height: 1;
+    }
+
+    .nav-item small {
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .nav-item.active {
+      background: var(--red);
+      color: #fff;
+      border-color: var(--line);
+      box-shadow: var(--shadow);
+    }
+
+    .nav-item.add {
+      margin-top: auto;
+      align-self: flex-start;
+      width: 56px;
+      min-height: 96px;
+      background: var(--gold);
+      color: #fff;
+      border-color: var(--line);
+      font-size: 38px;
+      line-height: 1;
+    }
+
+    .main {
+      flex: 1;
+      padding: 28px 30px;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      border-bottom: 2px solid var(--line);
+      padding-bottom: 12px;
+      margin-bottom: 30px;
+    }
+
+    .section-head h2 {
+      margin: 0;
+      font-size: 24px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: -0.04em;
+    }
+
+    .section-head span {
+      font-size: 14px;
+      color: #7f746a;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 28px 30px;
+    }
+
+    .card {
+      border: 2px solid var(--line);
+      background: #fff;
+      padding: 20px;
+      min-height: 224px;
+    }
+
+    .card-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+      margin-bottom: 20px;
+    }
+
+    .site-icon {
+      width: 54px;
+      height: 54px;
+      border: 2px solid var(--line);
+      display: grid;
+      place-items: center;
+      color: #fff;
+      font-size: 28px;
+      font-weight: 800;
+    }
+
+    .site-icon.blue { background: var(--blue); }
+    .site-icon.red { background: var(--red); }
+    .site-icon.black { background: #27241e; }
+    .site-icon.gold { background: var(--gold); }
+
+    .card-actions {
+      display: flex;
+      gap: 12px;
+      color: #aaa39a;
+      font-size: 24px;
+      line-height: 1;
+    }
+
+    .card h3 {
+      margin: 0 0 10px;
+      font-size: 18px;
+      line-height: 1.15;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .card p {
+      margin: 0;
+      color: #5f564f;
+      font-size: 15px;
+      line-height: 1.45;
+      min-height: 68px;
+    }
+
+    .tag {
+      display: inline-block;
+      margin-top: 16px;
+      padding: 4px 9px;
+      border: 2px solid var(--line);
+      background: var(--olive);
+      color: #000;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 18px 24px;
+      border-top: 2px solid var(--line);
+      background: rgba(255, 255, 255, 0.46);
+    }
+
+    .footer small {
+      color: #a09389;
+      font-size: 12px;
+      letter-spacing: 0.14em;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    .footer-icons {
+      display: flex;
+      gap: 18px;
+      font-size: 18px;
+    }
+
+    @media (max-width: 820px) {
+      body {
+        padding: 0;
+      }
+
+      .app {
+        width: 100%;
+        min-height: 100vh;
+        border-left: 0;
+        border-right: 0;
+      }
+    }
+
+    @media (max-width: 680px) {
+      .topbar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 14px;
+      }
+
+      .search {
+        width: 100%;
+      }
+
+      .content {
+        flex-direction: column;
+      }
+
+      .sidebar {
+        width: 100%;
+        border-right: 0;
+        border-bottom: 2px solid var(--line);
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .sidebar-label {
+        width: 100%;
+      }
+
+      .nav-item {
+        width: 84px;
+      }
+
+      .nav-item.add {
+        margin-top: 0;
+        align-self: auto;
+        min-height: 88px;
+      }
+
+      .main {
+        padding: 22px 20px;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <h1 class="brand">PinBase</h1>
+      <label class="search">
+        <input type="text" placeholder="搜索网站..." />
+        <span class="icon">⌕</span>
+      </label>
+    </header>
+
+    <section class="hero">
+      <button class="cta" type="button">
+        <span class="plus">+</span>
+        添加当前网站
+      </button>
+    </section>
+
+    <div class="content">
+      <aside class="sidebar">
+        <div class="sidebar-label">Nav</div>
+
+        <button class="nav-item active" type="button">
+          <span class="nav-icon">▦</span>
+          <small>全部</small>
+        </button>
+
+        <button class="nav-item" type="button">
+          <span class="nav-icon">&lt;/&gt;</span>
+          <small>开发</small>
+        </button>
+
+        <button class="nav-item" type="button">
+          <span class="nav-icon">◔</span>
+          <small>UI</small>
+        </button>
+
+        <button class="nav-item" type="button">
+          <span class="nav-icon">≣</span>
+          <small>笔记</small>
+        </button>
+
+        <button class="nav-item" type="button">
+          <span class="nav-icon">•••</span>
+          <small>其他</small>
+        </button>
+
+        <button class="nav-item add" type="button">+</button>
+      </aside>
+
+      <main class="main">
+        <div class="section-head">
+          <h2>Pinned Boards</h2>
+          <span>12 Items</span>
+        </div>
+
+        <div class="grid">
+          <article class="card">
+            <div class="card-head">
+              <div class="site-icon blue">◎</div>
+              <div class="card-actions"><span>⚙</span><span>×</span></div>
+            </div>
+            <h3>GitHub</h3>
+            <p>Development workflow and source code hosting.</p>
+            <span class="tag">开发</span>
+          </article>
+
+          <article class="card">
+            <div class="card-head">
+              <div class="site-icon red">✎</div>
+              <div class="card-actions"><span>⚙</span><span>×</span></div>
+            </div>
+            <h3>Figma</h3>
+            <p>Collaborative interface design tool.</p>
+            <span class="tag">UI</span>
+          </article>
+
+          <article class="card">
+            <div class="card-head">
+              <div class="site-icon black">⌘</div>
+              <div class="card-actions"><span>⚙</span><span>×</span></div>
+            </div>
+            <h3>Stack Overflow</h3>
+            <p>Knowledge sharing for developers.</p>
+            <span class="tag">开发</span>
+          </article>
+
+          <article class="card">
+            <div class="card-head">
+              <div class="site-icon blue">▣</div>
+              <div class="card-actions"><span>⚙</span><span>×</span></div>
+            </div>
+            <h3>Dribbble</h3>
+            <p>Design inspiration and showreel.</p>
+            <span class="tag">UI</span>
+          </article>
+
+          <article class="card">
+            <div class="card-head">
+              <div class="site-icon gold">☰</div>
+              <div class="card-actions"><span>⚙</span><span>×</span></div>
+            </div>
+            <h3>Notion</h3>
+            <p>All-in-one workspace for notes.</p>
+            <span class="tag">笔记</span>
+          </article>
+
+          <article class="card">
+            <div class="card-head">
+              <div class="site-icon blue">▤</div>
+              <div class="card-actions"><span>⚙</span><span>×</span></div>
+            </div>
+            <h3>Medium</h3>
+            <p>Interesting stories and tech articles.</p>
+            <span class="tag">其他</span>
+          </article>
+        </div>
+      </main>
+    </div>
+
+    <footer class="footer">
+      <small>PinBase Browser Ext v1.2.0</small>
+      <div class="footer-icons">
+        <span>❔</span>
+        <span>↪</span>
+      </div>
+    </footer>
+  </div>
+</body>
+</html>

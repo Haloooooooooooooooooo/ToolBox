@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "skills": {
+    "prd-writer": {
+      "source": "chituai/prd-writer",
+      "sourceType": "github",
+      "computedHash": "340b8861883496f70172d12204ecd719185671c3780a600931058aac3f24d48e"
+    }
+  }
+}

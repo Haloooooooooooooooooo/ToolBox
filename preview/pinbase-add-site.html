@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PinBase 添加网站弹窗预览</title>
+  <style>
+    :root {
+      --bg: #f6efe3;
+      --panel: #fffaf2;
+      --line: #1d1c17;
+      --muted: #6e625a;
+      --red: #c4122f;
+      --blue: #2d58db;
+      --gold: #8d7700;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      background:
+        linear-gradient(rgba(60, 55, 49, 0.34), rgba(60, 55, 49, 0.34)),
+        radial-gradient(circle at 85% 18%, rgba(45, 88, 219, 0.16), transparent 180px),
+        radial-gradient(circle at 12% 78%, rgba(196, 18, 47, 0.12), transparent 160px),
+        var(--bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .dialog {
+      width: min(100%, 720px);
+      background: var(--panel);
+      border: 2px solid var(--line);
+      box-shadow: 14px 14px 0 0 rgba(29, 28, 23, 0.9);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .dialog-header {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 28px 30px 22px;
+      border-bottom: 2px solid var(--line);
+      background: rgba(255, 250, 242, 0.98);
+    }
+
+    .dialog-header::after {
+      content: "";
+      position: absolute;
+      right: -22px;
+      top: -22px;
+      width: 128px;
+      height: 128px;
+      border-radius: 999px;
+      background: rgba(45, 88, 219, 0.12);
+    }
+
+    .dialog-header h1 {
+      position: relative;
+      z-index: 1;
+      margin: 0;
+      font-size: 28px;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+    }
+
+    .close {
+      position: relative;
+      z-index: 1;
+      width: 52px;
+      height: 52px;
+      border: 2px solid var(--line);
+      background: #dce3f7;
+      box-shadow: 4px 4px 0 0 #1d1c17;
+      font-size: 24px;
+      line-height: 1;
+    }
+
+    .body {
+      padding: 36px 42px 18px;
+    }
+
+    .field {
+      margin-bottom: 28px;
+    }
+
+    .field-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 10px;
+    }
+
+    .label {
+      color: #5f524a;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .hint {
+      color: #1148d8;
+      font-size: 14px;
+      font-weight: 900;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    .input,
+    .textarea,
+    .url-box {
+      width: 100%;
+      border: 2px solid var(--line);
+      background: #fff;
+      color: var(--line);
+      font-size: 18px;
+    }
+
+    .input,
+    .url-box {
+      height: 64px;
+      padding: 0 18px;
+    }
+
+    .textarea {
+      min-height: 122px;
+      padding: 16px 18px;
+      resize: vertical;
+    }
+
+    .url-box {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .url-icon {
+      color: #4f1f1f;
+      font-size: 24px;
+      line-height: 1;
+    }
+
+    .category-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .category {
+      min-height: 58px;
+      border: 2px solid var(--line);
+      background: transparent;
+      color: var(--line);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 0 18px;
+      font-size: 16px;
+      font-weight: 800;
+    }
+
+    .category .box {
+      width: 24px;
+      height: 24px;
+      border: 2px solid var(--line);
+      background: #fff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 900;
+    }
+
+    .category.active {
+      background: var(--red);
+      color: #fff;
+    }
+
+    .category.active .box {
+      color: var(--red);
+      background: #fff;
+    }
+
+    .footer {
+      border-top: 2px solid var(--line);
+      padding: 26px 42px 30px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      position: relative;
+    }
+
+    .decor {
+      display: flex;
+      gap: 6px;
+      align-items: flex-end;
+      background: rgba(212, 64, 92, 0.08);
+      padding: 14px 16px 18px;
+    }
+
+    .decor span {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+    }
+
+    .decor .red { background: var(--red); }
+    .decor .blue { background: var(--blue); }
+    .decor .gold { background: var(--gold); }
+
+    .actions {
+      display: flex;
+      gap: 18px;
+    }
+
+    .btn {
+      min-width: 126px;
+      height: 62px;
+      border: 2px solid var(--line);
+      font-size: 18px;
+      font-weight: 900;
+      letter-spacing: 0.02em;
+      background: #fff;
+      color: var(--line);
+      box-shadow: 4px 4px 0 0 #1d1c17;
+    }
+
+    .btn.primary {
+      background: var(--red);
+      color: #fff;
+    }
+
+    @media (max-width: 760px) {
+      .body,
+      .footer {
+        padding-left: 20px;
+        padding-right: 20px;
+      }
+    }
+
+    @media (max-width: 620px) {
+      body {
+        padding: 12px;
+      }
+
+      .category-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .footer {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .actions {
+        width: 100%;
+      }
+
+      .btn {
+        flex: 1;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="dialog">
+    <header class="dialog-header">
+      <h1>添加网站</h1>
+      <button class="close" type="button">×</button>
+    </header>
+
+    <div class="body">
+      <div class="field">
+        <div class="field-row">
+          <label class="label" for="site-name">网站名称</label>
+        </div>
+        <input id="site-name" class="input" type="text" value="ChatGPT" />
+      </div>
+
+      <div class="field">
+        <div class="field-row">
+          <label class="label">网站链接（自动获取）</label>
+          <span class="hint">Auto-Sync Active</span>
+        </div>
+        <div class="url-box">
+          <span class="url-icon">⛓</span>
+          <span>https://chat.openai.com</span>
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="field-row">
+          <label class="label">分类</label>
+        </div>
+        <div class="category-grid">
+          <button class="category active" type="button"><span class="box">■</span>开发常用</button>
+          <button class="category" type="button"><span class="box"></span>UI设计</button>
+          <button class="category" type="button"><span class="box"></span>笔记</button>
+          <button class="category" type="button"><span class="box"></span>其他</button>
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="field-row">
+          <label class="label" for="note">备注（可选）</label>
+        </div>
+        <textarea id="note" class="textarea">日常AI工具</textarea>
+      </div>
+    </div>
+
+    <footer class="footer">
+      <div class="decor">
+        <span class="red"></span>
+        <span class="blue"></span>
+        <span class="gold"></span>
+      </div>
+
+      <div class="actions">
+        <button class="btn" type="button">取消</button>
+        <button class="btn primary" type="button">保存</button>
+      </div>
+    </footer>
+  </div>
+</body>
+</html>
