@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "PinBase",
-  "description": "快速收藏、分类整理并查找常用网站的浏览器插件。",
+  "description": "快速收藏、分类整理并查找常用网站的浏览器扩展。",
   "version": "0.1.0",
   "icons": {
     "16": "icons/icon-16.png",
