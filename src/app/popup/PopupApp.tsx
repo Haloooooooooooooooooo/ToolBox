@@ -443,13 +443,15 @@ export function PopupApp() {
         </div>
 
         {toast ? (
-          <div className={`toast ${toast.variant}`} role="status">
+          <div className="toast-slot">
+            <div className={`toast ${toast.variant}`} role="status">
             <span>{toast.message}</span>
             {undoSite ? (
               <button className="toast-action" onClick={() => void handleUndoDelete()} type="button">
                 撤销
               </button>
             ) : null}
+            </div>
           </div>
         ) : null}
       </div>
