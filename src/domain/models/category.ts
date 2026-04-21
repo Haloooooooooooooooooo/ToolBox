@@ -4,4 +4,5 @@ export interface CategoryItem {
   createdAt: number;
 }
 
-export const BUILT_IN_CATEGORIES = ["开发", "UI", "笔记", "其他"] as const;
+export const DEFAULT_CATEGORIES = ["开发", "UI", "笔记", "其他"] as const;
+export const FALLBACK_CATEGORY = "其他";
